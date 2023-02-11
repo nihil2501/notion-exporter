@@ -16,6 +16,7 @@
   "module": "dist/notion-exporter.esm.js",
   "bin": "./bin/index.js",
   "scripts": {
+    "try": "node ./bin/dev.js",
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test",
@@ -25,6 +26,7 @@
   "dependencies": {
     "adm-zip": "^0.5.5",
     "axios": "^0.21.4",
+    "dotenv": "^16.0.3",
     "sade": "^1.7.4",
     "uuid": "^8.3.2"
   },

@@ -108,7 +108,8 @@ export class NotionExporter {
     predicate: (entry: AdmZip.IZipEntry) => boolean
   ): Promise<string> {
     const zip = await this.getZipUrl(idOrUrl).then(this.getZip)
-    const entry = zip.getEntries().find(predicate)
+    const entries = zip.getEntries()
+    const entry = entries.find(predicate)
     return (
       entry?.getData().toString().trim() ||
       Promise.reject("Could not find file in ZIP.")
