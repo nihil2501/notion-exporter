@@ -123,7 +123,7 @@ export class NotionExporter {
     if (primaryEntry !== undefined) {
       supportingEntries.forEach((entry) => {
         if (supportFileOutputPath !== undefined) {
-          zip.extractEntryTo(entry, supportFileOutputPath)
+          zip.extractEntryTo(entry, supportFileOutputPath, true, true)
         }
       })
 

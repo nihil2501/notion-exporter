@@ -1,11 +1,11 @@
 {
-  "name": "notion-exporter",
+  "name": "notion-exporter-with-images",
   "author": "Yann Bolliger",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yannbolliger/notion-exporter.git"
+    "url": "git+https://github.com/nihil2501/notion-exporter.git"
   },
-  "version": "0.3.0",
+  "version": "0.4.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
