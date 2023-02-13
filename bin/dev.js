@@ -4,4 +4,4 @@
 
 require("dotenv").config()
 
-require("../dist").cli(process.argv.concat([process.env.NOTION_URL]))
+require("../dist").cli(process.argv.concat([process.env.NOTION_URL, "-o", "images"]))

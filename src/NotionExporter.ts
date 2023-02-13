@@ -105,15 +105,32 @@ export class NotionExporter {
    */
   async getFileString(
     idOrUrl: string,
-    predicate: (entry: AdmZip.IZipEntry) => boolean
+    predicate: (entry: AdmZip.IZipEntry) => boolean,
+    supportFileOutputPath: string | undefined
   ): Promise<string> {
+    let primaryEntry: AdmZip.IZipEntry | undefined
+    const supportingEntries: AdmZip.IZipEntry[] = []
+
     const zip = await this.getZipUrl(idOrUrl).then(this.getZip)
-    const entries = zip.getEntries()
-    const entry = entries.find(predicate)
-    return (
-      entry?.getData().toString().trim() ||
-      Promise.reject("Could not find file in ZIP.")
-    )
+    zip.getEntries().forEach((entry) => {
+      if (predicate(entry)) {
+        primaryEntry = entry
+      } else {
+        supportingEntries.push(entry)
+      }
+    })
+
+    if (primaryEntry !== undefined) {
+      supportingEntries.forEach((entry) => {
+        if (supportFileOutputPath !== undefined) {
+          zip.extractEntryTo(entry, supportFileOutputPath)
+        }
+      })
+
+      return primaryEntry.getData().toString().trim()
+    } else {
+      return Promise.reject("Could not find file in ZIP.")
+    }
   }
 
   /**
@@ -122,8 +139,8 @@ export class NotionExporter {
    * @param idOrUrl BlockId or URL of the page/block/DB to export
    * @returns The extracted CSV string
    */
-  getCsvString = (idOrUrl: string): Promise<string> =>
-    this.getFileString(idOrUrl, (e) => e.name.endsWith(".csv"))
+  getCsvString = (idOrUrl: string, supportFileOutputPath: string | undefined): Promise<string> =>
+    this.getFileString(idOrUrl, (e) => e.name.endsWith(".csv"), supportFileOutputPath)
 
   /**
    * Downloads and extracts the first Markdown file of the exported block as string.
@@ -131,6 +148,6 @@ export class NotionExporter {
    * @param idOrUrl BlockId or URL of the page/block/DB to export
    * @returns The extracted Markdown string
    */
-  getMdString = (idOrUrl: string): Promise<string> =>
-    this.getFileString(idOrUrl, (e) => e.name.endsWith(".md"))
+  getMdString = (idOrUrl: string, supportFileOutputPath: string | undefined): Promise<string> =>
+    this.getFileString(idOrUrl, (e) => e.name.endsWith(".md"), supportFileOutputPath)
 }

@@ -22,7 +22,7 @@ const askToken = (): Promise<string> => {
   return promise
 }
 
-const action = async (blockId: string, fileType: string) => {
+const action = async (blockId: string, fileType: string, supportFileOutputPath: string | undefined) => {
   if (!isFileType(fileType)) {
     console.log(`File type (-t, --type) has to be one of: ${FileType}`)
     process.exit(1)
@@ -33,8 +33,8 @@ const action = async (blockId: string, fileType: string) => {
 
   const outputStr =
     fileType === "csv"
-      ? exporter.getCsvString(blockId)
-      : exporter.getMdString(blockId)
+      ? exporter.getCsvString(blockId, supportFileOutputPath)
+      : exporter.getMdString(blockId, supportFileOutputPath)
 
   outputStr.then(console.log).catch((e) => {
     if (e?.isAxiosError) {
